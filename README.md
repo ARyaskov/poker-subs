@@ -1,3 +1,8 @@
+
+<div align="center" style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://github.com/ARyaskov/poker-subs/raw/main/docs/logo.png" width="144"/>
+</div>
+
 # Poker GraphQL Subscriptions Demo Project
 
 ## Requirements
