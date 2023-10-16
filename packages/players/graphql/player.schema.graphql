@@ -1,0 +1,28 @@
+"""
+Represents a player in the system with associated attributes.
+"""
+type Player {
+  "Unique identifier for the player"
+  playerId: String!
+
+  "Name associated with the player"
+  name: String!
+
+  "Current balance of the player measured in cents"
+  balanceAtCents: Int!
+}
+
+"""
+The root Query type defining the available queries for data retrieval.
+"""
+type Query {
+  """
+  Retrieve the details of a player based on their unique identifier.
+
+  Arguments:
+  - playerId: The unique identifier associated with a player.
+
+  Returns the Player type containing details like name and balance.
+  """
+  getPlayer(playerId: String!): Player
+}

@@ -1,0 +1,33 @@
+spectaql:
+  logoFile: docs/logo.png
+  faviconFile: docs/favicon.png
+  displayAllServers: true
+
+introspection:
+  removeTrailingPeriodFromDescriptions: false
+  schemaFile: ./mergedSchema.graphql
+  dynamicExamplesProcessingModule: ./examples/customizations/examples
+  queryNameStrategy: capitalizeFirst
+  fieldExpansionDepth: 2
+
+  spectaqlDirective:
+    enable: true
+
+extensions:
+  graphqlScalarExamples: true
+
+info:
+  title: Poker Subs GraphQL API Reference
+  description: This is a documentation for poker subs services ecosystem.
+  termsOfService: https://toivo.tech/legal/AR-PCTC.html
+  contact:
+    name: Andrei Riaskov
+    url: https://github.com/ARyaskov
+  license:
+    name: Andrei Riaskov Public Code License
+    url: https://toivo.tech/legal/AR-PCTC.html
+
+servers:
+  - url: http://localhost:3000/api/v0/graphql
+    description: Production
+    production: true

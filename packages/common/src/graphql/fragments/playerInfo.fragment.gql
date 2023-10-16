@@ -1,0 +1,5 @@
+fragment PlayerInfo on Player {
+    playerId
+    name
+}
+

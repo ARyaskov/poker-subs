@@ -1,0 +1,238 @@
+"""Enum representing the available game types."""
+enum GameType {
+  "NLH: Represents No Limit Hold'em Poker"
+  NLH
+  "PLO: Represents Pot Limit Omaha Poker"
+  PLO
+}
+
+"""Represents a player's seating arrangement and current state in a game."""
+type Seat {
+  "A unique identifier, assigned to players to track their game state and balances."
+  playerId: ID!
+  "Represents the current amount of currency, in cents, that the player has available to wager."
+  stackAtCents: Int!
+  "An array representing the player’s cards, utilizing a standard card notation (i.e., ['AS', '2D'] for Ace of Spades and Two of Diamonds)."
+  cards: [String!]!
+}
+
+"""
+A comprehensive type representing the state and configuration of an individual poker game.
+"""
+type Game {
+  "Determines the variant of the poker game, chosen from defined game types."
+  gameType: GameType!
+  "Specifies the value that is considered the 'big blind' for this game, in cents."
+  bbInCents: Int!
+  "If applicable, defines the ante value in cents for this game. Can be null if the game type or rules do not require an ante."
+  anteInCents: Int
+  "A unique identifier for the organization (e.g., a casino or online platform) that is hosting this game."
+  organizationId: ID!
+  "The number of seats at the table, indicating the maximum number of players that can participate in this game."
+  size: Int!
+  "An array of Seat objects representing the players currently seated at the table and their respective game states."
+  seats: [Seat!]!
+}
+
+"""The root Query type that provides the entry point to the data graph."""
+type Query {
+  "A query to retrieve an array of Game objects. The optional playerId argument can filter games related to a particular player."
+  getGames(playerId: String): [Game!]!
+  "A simple root query"
+  root: String
+  """
+  Retrieve the details of a player based on their unique identifier.
+  
+  Arguments:
+  - playerId: The unique identifier associated with a player.
+  
+  Returns the Player type containing details like name and balance.
+  """
+  getPlayer(playerId: String!): Player
+  "Retrieve various game-related statistical data"
+  getGameStatistics: GameStatistics!
+}
+
+"""
+Represents a table that is available for play but currently not occupied.
+"""
+type FreeTable {
+  "The type of poker game to be played on this table, whether No Limit Hold'em (NLH) or Pot Limit Omaha (PLO)."
+  gameType: GameType!
+  "Specifies the value, in cents, that is considered as the 'big blind' for a hand at this table."
+  bbInCents: Int!
+  "If applicable, defines the ante value in cents for a hand at this table. Some game variants or table setups might not require an ante, hence this field can be null."
+  anteInCents: Int
+  "A unique string identifier assigned to the organization (such as a casino or online platform) that hosts this table."
+  organizationId: String!
+  "Defines the maximum number of players/seats that the table can accommodate."
+  size: Int!
+}
+
+"""Type defining the subscription available in the GraphQL API."""
+type Subscription {
+  "Allows clients to subscribe to updates about available free tables, receiving data whenever a new table fitting the criteria becomes available."
+  freeTable: [FreeTable]!
+  """
+  Allows clients to subscribe to player updates, receiving new data whenever the in-game player details change
+  and match the provided filter criteria.
+  """
+  inGamePlayer(filter: InGamePlayerFilterInput): InGamePlayer
+  """
+  A subscription that allows the client to receive real-time updates regarding tables that are currently occupied. Each update provides an array of OccupiedTable objects, reflecting the current state of the tables in the application.
+  """
+  occupiedTable: [OccupiedTable]!
+  """
+  Provides the functionality to subscribe to offline player events and retrieve offline player data in real-time.
+  
+  Arguments:
+  - filter: The criteria (OfflinePlayerFilterInput) used to filter and retrieve specific offline player data.
+  
+  Returns real-time updates for the offline player that matches the specified filter criteria.
+  """
+  offlinePlayer(filter: OfflinePlayerFilterInput): OfflinePlayer
+}
+
+"""
+Represents an entity, typically a company or group, that hosts poker games.
+"""
+type Organization {
+  "Unique identifier of the organization."
+  id: String!
+  "Number of tables currently being managed or hosted by the organization."
+  inGameTables: Int!
+}
+
+"""
+Details about a player that is currently participating in an online game.
+"""
+type InGamePlayer {
+  "Unique identifier used to reference a player."
+  playerId: String!
+  "Name or alias chosen or given to the player."
+  name: String!
+  "Total number of online poker tables the player is currently involved in."
+  totalOnlineTables: Int!
+  "List of organizations that the player is related to or engaged with."
+  organizations: [Organization!]!
+}
+
+"""
+Encapsulates the parameters to be used to filter results when querying for in-game players.
+"""
+input InGamePlayerFilterInput {
+  "If specified, filters results to include only the player with this unique identifier."
+  playerId: String
+  "If specified, filters results to include only players with this name."
+  name: String
+  "If specified, filters results to include only players engaged in this exact number of online games."
+  totalOnlineTables: Int
+  "If specified, filters results to include only players associated with the specified organization IDs."
+  organizations: [String!]
+}
+
+"""
+Type representing a table that is currently occupied, with various attributes specifying the gameplay and organizational details.
+"""
+type OccupiedTable {
+  """
+  The type of poker game being played on this table. Possible values are NLH (No Limit Hold'em) or PLO (Pot Limit Omaha).
+  """
+  gameType: GameType!
+  """
+  The amount (in cents) that is designated as the big blind (bb) for this table. This value dictates the minimum bet or raise in certain betting rounds.
+  """
+  bbAtCents: Int!
+  """
+  The amount (in cents) determined as the ante for this table. This is an optional field, as not all games/table configurations may require an ante. If present, the ante is a forced bet that all players must post before the start of a hand.
+  """
+  anteAtCents: Int
+  """
+  A unique identifier for the organization that is hosting or responsible for this table. This could be utilized to retrieve further details about the organization from other parts of the API.
+  """
+  organizationId: String!
+  """
+  Indicates the total number of seats available at this table. This number remains constant and is defined by the table's configuration.
+  """
+  size: Int!
+  """
+  Denotes the number of seats that are currently occupied by players at this table. This number can vary between 0 and the total size of the table.
+  """
+  occupiedSeatsCount: Int!
+}
+
+"""Represents a player who is currently offline with relevant attributes."""
+type OfflinePlayer {
+  "Unique identifier for the player."
+  playerId: String!
+  "Name associated with the player."
+  name: String!
+  "Current balance of the player measured in cents."
+  balanceAtCents: Int!
+}
+
+"""Input type to filter offline players based on specific criteria."""
+input OfflinePlayerFilterInput {
+  """
+  The unique identifier of the player. Useful for retrieving specific player details.
+  """
+  playerId: String
+  """
+  The name of the player. Useful for searching and retrieving players by their names.
+  """
+  name: String
+  """
+  The balance of the player in cents. Useful for filtering players based on their balance thresholds.
+  """
+  balanceAtCents: Int
+}
+
+"""
+Type defining the available mutations, allowing for modification of the data.
+"""
+type Mutation {
+  """Returns a Boolean indicating the success or failure of the operation."""
+  publishUpdateBB1: Boolean
+  """
+  Update the total number of players currently online.
+  Arguments:
+  - newTotalOnlinePlayers: The new total of online players to be set.
+  
+  Returns true if the update was successful.
+  """
+  updateTotalOnlinePlayers(newTotalOnlinePlayers: Int!): Boolean!
+}
+
+"""Represents a player in the system with associated attributes."""
+type Player {
+  "Unique identifier for the player"
+  playerId: String!
+  "Name associated with the player"
+  name: String!
+  "Current balance of the player measured in cents"
+  balanceAtCents: Int!
+}
+
+"""
+Type providing various statistical data related to the games and players.
+"""
+type GameStatistics {
+  "The average stack size of players, in cents"
+  averageStackAtCents: Float!
+  "The total number of active tables"
+  totalActiveTables: Int!
+  "The average number of players per table"
+  averagePlayersPerTable: Float!
+  "The total number of players currently online"
+  totalOnlinePlayers: Int!
+  "The average balance of offline players, in cents"
+  averageBalanceOfOfflinePlayers: Float!
+  "The most popular type of poker game being played"
+  mostPopularGameType: GameType!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}

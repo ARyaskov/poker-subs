@@ -1,0 +1,59 @@
+"""
+Enumeration of available game types.
+
+Abbreviations:
+- NLH: No Limit Hold'em
+- PLO: Pot Limit Omaha
+"""
+enum GameType {
+    "NLH: Represents No Limit Hold'em Poker"
+    NLH
+
+    "PLO: Represents Pot Limit Omaha Poker"
+    PLO
+}
+
+"""
+Represents a player's seating arrangement and current state in a game.
+"""
+type Seat {
+    "A unique identifier, assigned to players to track their game state and balances."
+    playerId: ID!
+
+    "Represents the current amount of currency, in cents, that the player has available to wager."
+    stackAtCents: Int!
+
+    "An array representing the player’s cards, utilizing a standard card notation (i.e., ['AS', '2D'] for Ace of Spades and Two of Diamonds)."
+    cards: [String!]!
+}
+
+"""
+A comprehensive type representing the state and configuration of an individual poker game.
+"""
+type Game {
+    "Determines the variant of the poker game, chosen from defined game types."
+    gameType: GameType!
+
+    "Specifies the value that is considered the 'big blind' for this game, in cents."
+    bbInCents: Int!
+
+    "If applicable, defines the ante value in cents for this game. Can be null if the game type or rules do not require an ante."
+    anteInCents: Int
+
+    "A unique identifier for the organization (e.g., a casino or online platform) that is hosting this game."
+    organizationId: ID!
+
+    "The number of seats at the table, indicating the maximum number of players that can participate in this game."
+    size: Int!
+
+    "An array of Seat objects representing the players currently seated at the table and their respective game states."
+    seats: [Seat!]!
+}
+
+"""
+The root Query type to fetch data within the schema.
+"""
+type Query {
+    "A query to retrieve an array of Game objects. The optional playerId argument can filter games related to a particular player."
+    getGames(playerId: String): [Game!]!
+}

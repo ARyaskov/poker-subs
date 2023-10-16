@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: games-dev-deployment
+  labels:
+    app: games-dev
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: games-dev
+  template:
+    metadata:
+      labels:
+        app: games-dev
+    spec:
+      containers:
+        - name: games-dev
+          image: games:dev
+          ports:
+            - containerPort: 3000

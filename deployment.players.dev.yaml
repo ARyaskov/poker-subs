@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: players-dev-deployment
+  labels:
+    app: players-dev
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: players-dev
+  template:
+    metadata:
+      labels:
+        app: players-dev
+    spec:
+      containers:
+        - name: players-dev
+          image: players:dev
+          ports:
+            - containerPort: 3000

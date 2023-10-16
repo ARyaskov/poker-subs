@@ -1,0 +1,63 @@
+"""
+Represents an entity, typically a company or group, that hosts poker games.
+"""
+type Organization {
+    "Unique identifier of the organization."
+    id: String!
+
+    "Number of tables currently being managed or hosted by the organization."
+    inGameTables: Int!
+}
+
+"""
+Details about a player that is currently participating in an online game.
+"""
+type InGamePlayer {
+    "Unique identifier used to reference a player."
+    playerId: String!
+
+    "Name or alias chosen or given to the player."
+    name: String!
+
+    "Total number of online poker tables the player is currently involved in."
+    totalOnlineTables: Int!
+
+    "List of organizations that the player is related to or engaged with."
+    organizations: [Organization!]!
+}
+
+"""
+Encapsulates the parameters to be used to filter results when querying for in-game players.
+"""
+input InGamePlayerFilterInput {
+    "If specified, filters results to include only the player with this unique identifier."
+    playerId: String
+
+    "If specified, filters results to include only players with this name."
+    name: String
+
+    "If specified, filters results to include only players engaged in this exact number of online games."
+    totalOnlineTables: Int
+
+    "If specified, filters results to include only players associated with the specified organization IDs."
+    organizations: [String!]
+}
+
+"""
+Root level subscription operations available in the API.
+"""
+type Subscription {
+    """
+    Allows clients to subscribe to player updates, receiving new data whenever the in-game player details change
+    and match the provided filter criteria.
+    """
+    inGamePlayer(filter: InGamePlayerFilterInput): InGamePlayer
+}
+
+"""
+Root level query operations available in the API.
+"""
+type Query {
+    "A simple field to verify the API is running and accessible."
+    root: String
+}

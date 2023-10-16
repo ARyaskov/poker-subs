@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stats-dev-deployment
+  labels:
+    app: stats-dev
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: stats-dev
+  template:
+    metadata:
+      labels:
+        app: stats-dev
+    spec:
+      containers:
+        - name: stats-dev
+          image: stats:dev
+          ports:
+            - containerPort: 3000

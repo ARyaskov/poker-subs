@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-dev-deployment
+  labels:
+    app: monitoring-dev
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: monitoring-dev
+  template:
+    metadata:
+      labels:
+        app: monitoring-dev
+    spec:
+      containers:
+        - name: monitoring-dev
+          image: monitoring:dev
+          ports:
+            - containerPort: 3000

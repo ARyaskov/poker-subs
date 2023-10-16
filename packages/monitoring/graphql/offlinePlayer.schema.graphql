@@ -1,0 +1,70 @@
+"""
+Represents a player who is currently offline with relevant attributes.
+"""
+type OfflinePlayer {
+    "Unique identifier for the player."
+    playerId: String!
+
+    "Name associated with the player."
+    name: String!
+
+    "Current balance of the player measured in cents."
+    balanceAtCents: Int!
+}
+
+"""
+Input type to filter offline players based on specific criteria.
+"""
+input OfflinePlayerFilterInput {
+    """
+    The unique identifier of the player. Useful for retrieving specific player details.
+    """
+    playerId: String
+
+    """
+    The name of the player. Useful for searching and retrieving players by their names.
+    """
+    name: String
+
+    """
+    The balance of the player in cents. Useful for filtering players based on their balance thresholds.
+    """
+    balanceAtCents: Int
+}
+
+"""
+Type defining the subscription available in the GraphQL API.
+"""
+type Subscription {
+    """
+    Provides the functionality to subscribe to offline player events and retrieve offline player data in real-time.
+
+    Arguments:
+    - filter: The criteria (OfflinePlayerFilterInput) used to filter and retrieve specific offline player data.
+
+    Returns real-time updates for the offline player that matches the specified filter criteria.
+    """
+    offlinePlayer(filter: OfflinePlayerFilterInput): OfflinePlayer
+}
+
+"""
+Root queries providing the primary entry points for data retrieval in the GraphQL API.
+"""
+type Query {
+    """
+    A placeholder query. May return a welcome message or be used for health checks.
+    """
+    root: String
+}
+
+"""
+Root mutations providing the primary entry points for data modification in the GraphQL API.
+"""
+type Mutation {
+    """
+    Returns a Boolean indicating the success or failure of the operation.
+    """
+    publishUpdateBB1: Boolean
+}
+
+

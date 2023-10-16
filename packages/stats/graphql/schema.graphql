@@ -1,0 +1,58 @@
+"""
+Enum representing the available game types.
+"""
+enum GameType {
+  "No Limit Hold'em poker game type"
+  NLH
+
+  "Pot Limit Omaha poker game type"
+  PLO
+}
+
+"""
+Type providing various statistical data related to the games and players.
+"""
+type GameStatistics {
+  "The average stack size of players, in cents"
+  averageStackAtCents: Float!
+
+  "The total number of active tables"
+  totalActiveTables: Int!
+
+  "The average number of players per table"
+  averagePlayersPerTable: Float!
+
+  "The total number of players currently online"
+  totalOnlinePlayers: Int!
+
+  "The average balance of offline players, in cents"
+  averageBalanceOfOfflinePlayers: Float!
+
+  "The most popular type of poker game being played"
+  mostPopularGameType: GameType!
+}
+
+"""
+The root Query type that provides the entry point to the data graph.
+"""
+type Query {
+  "A simple root query"
+  root: String
+
+  "Retrieve various game-related statistical data"
+  getGameStatistics: GameStatistics!
+}
+
+"""
+Type defining the available mutations, allowing for modification of the data.
+"""
+type Mutation {
+  """
+  Update the total number of players currently online.
+  Arguments:
+  - newTotalOnlinePlayers: The new total of online players to be set.
+
+  Returns true if the update was successful.
+  """
+  updateTotalOnlinePlayers(newTotalOnlinePlayers: Int!): Boolean!
+}

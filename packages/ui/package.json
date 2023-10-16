@@ -1,0 +1,35 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "browserslist": [
+    ">10%"
+  ],
+  "scripts": {
+    "build:test": "parcel build src/index.html",
+    "build": "npx cross-env REACT_APP_MONITORING_ENDPOINT=localhost:3000 REACT_APP_STATS_ENDPOINT=localhost:3003 parcel build src/index.html",
+    "build:docker": "parcel build src/index.html",
+    "start:dev": "npx cross-env REACT_APP_MONITORING_ENDPOINT=monitoring-dev:3000 REACT_APP_STATS_ENDPOINT=stats-dev:3003 parcel src/index.html",
+    "format": "prettier --write \"src/**/*.ts(x)?\"",
+    "start:demo": "npx cross-env REACT_APP_MONITORING_ENDPOINT=localhost:3000 REACT_APP_STATS_ENDPOINT=localhost:3003 parcel src/index.html"
+  },
+  "devDependencies": {
+    "@types/node": "^18.18.4",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.11",
+    "parcel-bundler": "^1.12.5",
+    "sass": "^1.69.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "bowser": "^2.11.0",
+    "core-js": "^3.33.0",
+    "cross-fetch": "^4.0.0",
+    "history": "^5.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "reflect-metadata": "^0.1.13"
+  }
+}

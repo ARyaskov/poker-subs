@@ -1,0 +1,38 @@
+"""
+Enumeration of available game types.
+"""
+enum GameType {
+    "NLH: No Limit Hold'em variant of poker"
+    NLH
+
+    "PLO: Pot Limit Omaha variant of poker"
+    PLO
+}
+
+"""
+Represents a table that is available for play but currently not occupied.
+"""
+type FreeTable {
+    "The type of poker game to be played on this table, whether No Limit Hold'em (NLH) or Pot Limit Omaha (PLO)."
+    gameType: GameType!
+
+    "Specifies the value, in cents, that is considered as the 'big blind' for a hand at this table."
+    bbInCents: Int!
+
+    "If applicable, defines the ante value in cents for a hand at this table. Some game variants or table setups might not require an ante, hence this field can be null."
+    anteInCents: Int
+
+    "A unique string identifier assigned to the organization (such as a casino or online platform) that hosts this table."
+    organizationId: String!
+
+    "Defines the maximum number of players/seats that the table can accommodate."
+    size: Int!
+}
+
+"""
+Root subscription types allowing for real-time updates based on the schema's defined operations.
+"""
+type Subscription {
+    "Allows clients to subscribe to updates about available free tables, receiving data whenever a new table fitting the criteria becomes available."
+    freeTable: [FreeTable]!
+}

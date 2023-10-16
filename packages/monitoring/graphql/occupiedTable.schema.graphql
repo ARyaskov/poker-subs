@@ -1,0 +1,55 @@
+"""
+Enumeration defining the possible game types within the application.
+"""
+enum GameType {
+    "No Limit Hold'em (NLH) - a poker game variant"
+    NLH
+
+    "Pot Limit Omaha (PLO) - another poker game variant"
+    PLO
+}
+
+"""
+Type representing a table that is currently occupied, with various attributes specifying the gameplay and organizational details.
+"""
+type OccupiedTable {
+    """
+    The type of poker game being played on this table. Possible values are NLH (No Limit Hold'em) or PLO (Pot Limit Omaha).
+    """
+    gameType: GameType!
+
+    """
+    The amount (in cents) that is designated as the big blind (bb) for this table. This value dictates the minimum bet or raise in certain betting rounds.
+    """
+    bbAtCents: Int!
+
+    """
+    The amount (in cents) determined as the ante for this table. This is an optional field, as not all games/table configurations may require an ante. If present, the ante is a forced bet that all players must post before the start of a hand.
+    """
+    anteAtCents: Int
+
+    """
+    A unique identifier for the organization that is hosting or responsible for this table. This could be utilized to retrieve further details about the organization from other parts of the API.
+    """
+    organizationId: String!
+
+    """
+    Indicates the total number of seats available at this table. This number remains constant and is defined by the table's configuration.
+    """
+    size: Int!
+
+    """
+    Denotes the number of seats that are currently occupied by players at this table. This number can vary between 0 and the total size of the table.
+    """
+    occupiedSeatsCount: Int!
+}
+
+"""
+Type representing the subscriptions available within the API. Subscriptions allow the client to receive real-time updates from the server via a websocket connection.
+"""
+type Subscription {
+    """
+    A subscription that allows the client to receive real-time updates regarding tables that are currently occupied. Each update provides an array of OccupiedTable objects, reflecting the current state of the tables in the application.
+    """
+    occupiedTable: [OccupiedTable]!
+}

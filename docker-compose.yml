@@ -1,0 +1,63 @@
+version: '3'
+
+name: poker-compose
+services:
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  monitoring-dev:
+    build:
+      dockerfile: Dockerfile.monitoring.dev
+    image: monitoring:dev
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URI=redis://redis:6379
+      - GAMES_ENDPOINT=ws://games-dev:3001/api/v0/graphql
+      - PLAYERS_ENDPOINT=ws://players-dev:3002/api/v0/graphql
+      - STATS_ENDPOINT=ws://stats-dev:3003/api/v0/graphql
+    depends_on:
+      - redis
+      - players-dev
+      - games-dev
+      - stats-dev
+
+  players-dev:
+    build:
+      dockerfile: Dockerfile.players.dev
+    image: players:dev
+    ports:
+      - "3001:3000"
+    environment:
+      - REDIS_URI=redis://redis
+
+  games-dev:
+    build:
+      dockerfile: Dockerfile.games.dev
+    image: games:dev
+    ports:
+      - "3002:3000"
+    environment:
+      - REDIS_URI=redis://redis
+
+  stats-dev:
+    build:
+      dockerfile: Dockerfile.stats.dev
+    image: stats:dev
+    ports:
+      - "3003:3000"
+    environment:
+      - REDIS_URI=redis://redis
+
+  ui-dev:
+    build:
+      dockerfile: Dockerfile.ui.dev
+      args:
+        - REACT_APP_MONITORING_ENDPOINT=monitoring-dev
+        - REACT_APP_STATS_ENDPOINT=stats-dev
+    ports:
+      - "8090:80"
+    depends_on:
+      - monitoring-dev

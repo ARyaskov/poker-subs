@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui-dev-deployment
+  labels:
+    app: ui-dev
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: ui-dev
+  template:
+    metadata:
+      labels:
+        app: ui-dev
+    spec:
+      containers:
+        - name: ui-dev
+          image: ui:dev
+          ports:
+            - containerPort: 80
