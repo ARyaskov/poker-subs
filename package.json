@@ -32,7 +32,6 @@
     "@nestjs/platform-ws": "^10.2.7",
     "@nestjs/websockets": "^10.2.6",
     "apollo-link": "^1.2.14",
-    "apollo-server-express": "^3.12.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
